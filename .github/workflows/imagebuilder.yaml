@@ -36,10 +36,13 @@ jobs:
           docker push quyencl91/max-weather:${{ github.sha }}
 
   update_deployment:
-    - name: Update the deployment manifest file
-      run: |
-        git config user.name "GitHub Actions"
-        git config user.email "actions@github.com"
-        kustomize edit set image quyencl91/max-weather=quyencl91/max-weather:${{ github.sha }}
-        git commit -am "Update image to ${{ github.sha }}"
-        git push
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Update the deployment manifest file
+        run: |
+          git config user.name "GitHub Actions"
+          git config user.email "actions@github.com"
+          kustomize edit set image quyencl91/max-weather=quyencl91/max-weather:${{ github.sha }}
+          git commit -am "Update image to ${{ github.sha }}"
+          git push
