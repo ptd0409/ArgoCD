@@ -20,9 +20,9 @@ spec:
     spec:
       containers:
         - name: backend-api
-          image: quyencl91/myapp:latest
+          image: nginx:latest
           ports:
-            - containerPort: 8086
+            - containerPort: 80
               name: backend-api
           resources:
             requests:
@@ -40,7 +40,7 @@ metadata:
 spec:
   ports:
     - port: 80 #egress port
-      targetPort: 8086 #ingress port ~ containerPort
+      targetPort: 80 #ingress port ~ containerPort
   selector:
     app: backend-api
   type: ClusterIP
