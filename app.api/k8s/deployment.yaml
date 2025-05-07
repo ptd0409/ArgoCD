@@ -13,6 +13,8 @@ spec:
       labels:
         app: backend-api
     spec:
+      imagePullSecrets:
+        - name: docker_hub_pull
       containers:
         - name: backend-api
           image: quyencl91/max-weather:ebac77b648dadb7fe38f8493b64ddf6a5d5cf2c0
