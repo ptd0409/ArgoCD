@@ -48,5 +48,7 @@ jobs:
           git config user.name "GitHub Actions"
           git config user.email "actions@github.com"
           kustomize edit set image quyencl91/max-weather=quyencl91/max-weather:${{ github.sha }}
+          cat kustomization.yaml
+          git add .
           git commit -am "Update image to ${{ github.sha }}"
           git push https://x-access-token:${{ secrets.GH_ACTION_PAT }}@github.com/quyennguyenvan/demo-argocd.git
