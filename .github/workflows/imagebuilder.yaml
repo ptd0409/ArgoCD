@@ -39,6 +39,9 @@ jobs:
     needs: build
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout repository
+        uses: actions/checkout@v3
+
       - name: Update the deployment manifest file
         run: |
           git config user.name "GitHub Actions"
