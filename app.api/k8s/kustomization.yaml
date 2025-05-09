@@ -4,6 +4,6 @@ resources:
 images:
 - name: quyencl91/max-weather
   newName: quyencl91/max-weather
-  newTag: ff30118e4b0b845fa83a220c538f38257fa4e0c1
+  newTag: d855d373486c4fd9fa993935be793fcc6a726c43
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
