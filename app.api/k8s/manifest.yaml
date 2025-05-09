@@ -11,7 +11,7 @@ metadata:
 spec:
   ports:
     - port: 80 #egress port
-      targetPort: 80 #ingress port ~ containerPort
+      targetPort: 8086 #ingress port ~ containerPort
   selector:
     app: backend-api
   type: ClusterIP

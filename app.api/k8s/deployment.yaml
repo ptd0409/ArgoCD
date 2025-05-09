@@ -19,7 +19,7 @@ spec:
         - name: backend-api
           image: quyencl91/max-weather:ebac77b648dadb7fe38f8493b64ddf6a5d5cf2c0
           ports:
-            - containerPort: 80
+            - containerPort: 8086
               name: backend-api
           resources:
             requests:
