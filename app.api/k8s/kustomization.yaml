@@ -2,10 +2,7 @@ resources:
 - deployment.yaml
 
 images:
-- name: backend-api
-  newTag: abcdeff
 - name: quyencl91/max-weather
-  newName: quyencl91/max-weather
-  newTag: 67a0cf43a2cc93ffb17d17a005ca68e8af9f0548
+  newTag: abcdeff
 apiVersion: kustomize.config.k8s.io/v1beta1
 kind: Kustomization
