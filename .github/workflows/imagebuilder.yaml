@@ -6,6 +6,10 @@ on:
       - main # Trigger action on pushes to main branch
     paths-ignore:
       - "app.api/k8s/**"
+
+permissions:
+  contents: write
+
 jobs:
   build:
     runs-on: ubuntu-latest
