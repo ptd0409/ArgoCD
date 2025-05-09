@@ -1,9 +1,4 @@
 apiVersion: v1
-kind: Namespace
-metadata:
-  name: max-weather-dev
----
-apiVersion: v1
 kind: Service
 metadata:
   name: svc-backend-api
@@ -15,4 +10,3 @@ spec:
   selector:
     app: backend-api
   type: ClusterIP
-#add dummy
