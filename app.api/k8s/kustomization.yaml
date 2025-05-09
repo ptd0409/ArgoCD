@@ -1,6 +1,11 @@
 resources:
-  - deployment.yaml
+- deployment.yaml
 
-images: 
-  - name: backend-api
-    newTag: abcdeff # replace by github action
+images:
+- name: backend-api
+  newTag: abcdeff
+- name: quyencl91/max-weather
+  newName: quyencl91/max-weather
+  newTag: 67a0cf43a2cc93ffb17d17a005ca68e8af9f0548
+apiVersion: kustomize.config.k8s.io/v1beta1
+kind: Kustomization
