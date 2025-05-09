@@ -4,7 +4,8 @@ on:
   push:
     branches:
       - main # Trigger action on pushes to main branch
-
+    paths-ignore:
+      - "app.api/k8s/**"
 jobs:
   build:
     runs-on: ubuntu-latest
