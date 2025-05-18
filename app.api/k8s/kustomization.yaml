@@ -7,6 +7,6 @@ resources:
   - service.yaml
 
 images:
-  - name: quyencl91/max-weather
-    newName: quyencl91/max-weather
-    newTag: d855d373486c4fd9fa993935be793fcc6a726c43
+  - name: ptd0409/td-argocd:main
+    newName: ptd0409/demo-argocd:main
+    newTag: main

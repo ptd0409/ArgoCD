@@ -2,7 +2,7 @@ apiVersion: v1
 kind: Service
 metadata:
   name: svc-backend-api
-  namespace: max-weather-dev
+  namespace: blooperry
 spec:
   ports:
     - port: 80 #egress port

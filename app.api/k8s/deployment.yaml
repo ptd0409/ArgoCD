@@ -2,7 +2,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: app-api
-  namespace: max-weather-dev
+  namespace: blooperry
 spec:
   replicas: 1
   selector:
@@ -17,7 +17,7 @@ spec:
         - name: dockerhubpull
       containers:
         - name: backend-api
-          image: quyencl91/max-weather:ebac77b648dadb7fe38f8493b64ddf6a5d5cf2c0
+          image: ptd0409/td-argocd:main
           ports:
             - containerPort: 8086
               name: backend-api
