@@ -8,6 +8,7 @@ resources:
 
 images:
 - name: ptd0409/td-argocd
+  newName: ptd0409/td-argocd
   newTag: main
 - name: ptd0409/td-argocd:main
   newName: ptd0409/demo-argocd:main
