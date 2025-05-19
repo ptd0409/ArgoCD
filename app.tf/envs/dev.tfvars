@@ -82,7 +82,7 @@ api_gateways = {
       }
     }
     ext-tags = {
-      "fucnt" = "demo-tf"
+      "func" = "demo-tf"
     }
   }
 }
