@@ -1,56 +1,50 @@
-resource "random_integer" "this" {
-  min = 10000000
-  max = 99999999
+variable "vpc_cidr" {
+  description = "CIDR block for the VPC"
+  type        = string
+  default     = "10.0.0.0/16"
 }
-locals {
-  azs      = slice(data.aws_availability_zones.available.names, 0, 3)
-  identify = random_integer.this.result
+
+variable "cluster_name" {
+  description = "EKS cluster name for tagging"
+  type        = string
+  default     = "tien-dung-cluster"
+}
+
+variable "enable_flow_log" {
+  description = "Enable VPC flow logs"
+  type        = bool
+  default     = false
 }
 
 module "vpc" {
   source  = "terraform-aws-modules/vpc/aws"
   version = "5.13.0"
 
-  name = var.vpc_name
+  name = "${var.cluster_name}-vpc"
   cidr = var.vpc_cidr
 
-  azs             = local.azs
-  private_subnets = [for k, v in local.azs : cidrsubnet(var.vpc_cidr, 4, k)]
-  public_subnets  = [for k, v in local.azs : cidrsubnet(var.vpc_cidr, 8, k + 48)]
-  intra_subnets   = [for k, v in local.azs : cidrsubnet(var.vpc_cidr, 8, k + 52)]
+  azs             = ["ap-southeast-1a", "ap-southeast-1b", "ap-southeast-1c"]
+  private_subnets = ["10.0.101.0/24", "10.0.102.0/24", "10.0.103.0/24"]
+  public_subnets  = ["10.0.1.0/24", "10.0.2.0/24", "10.0.3.0/24"]
 
-  enable_nat_gateway     = var.enable_nat_gateway
-  single_nat_gateway     = var.single_nat_gateway
-  one_nat_gateway_per_az = var.single_nat_gateway ? false : true
-  enable_dns_hostnames   = var.enable_dns_hostnames
+  enable_nat_gateway   = true
+  single_nat_gateway   = true
+  enable_dns_hostnames = true
+  enable_flow_log      = var.enable_flow_log
 
-  create_database_subnet_group           = var.create_database_subnet_group
-  create_database_subnet_route_table     = var.create_database_subnet_route_table
-  create_database_internet_gateway_route = var.create_database_internet_gateway_route
-
-  enable_flow_log                       = var.enable_flow_log
-  vpc_flow_log_iam_role_name            = "${var.vpc_name}-${local.identify}-follow-log-role"
-  vpc_flow_log_iam_role_use_name_prefix = false
-  create_flow_log_cloudwatch_iam_role   = var.create_flow_log_cloudwatch_iam_role
-  create_flow_log_cloudwatch_log_group  = var.create_flow_log_cloudwatch_log_group
-  flow_log_max_aggregation_interval     = 60
+  tags = {
+    Name        = "${var.cluster_name}-vpc"
+    Environment = "dev"
+    Terraform   = "true"
+  }
 
   public_subnet_tags = {
     "kubernetes.io/role/elb"                    = 1
     "kubernetes.io/cluster/${var.cluster_name}" = "shared"
-    Name                                        = "${var.cluster_name}-eks-public"
-
   }
 
   private_subnet_tags = {
-    Name                                        = "${var.cluster_name}-eks-private"
+    "kubernetes.io/role/internal-elb"           = 1
     "kubernetes.io/cluster/${var.cluster_name}" = "shared"
-
-    "kubernetes.io/role/internal-elb" = 1
   }
-
-  tags = merge(var.default_tags, {
-    Name                                        = "${var.cluster_name}-vpc"
-    "kubernetes.io/cluster/${var.cluster_name}" = "shared"
-  })
-}
+} 

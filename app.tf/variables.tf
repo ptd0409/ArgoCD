@@ -1,5 +1,5 @@
 variable "vpc_name" {
-  default = "main"
+  default = "tien-dung-cluster-vpc"
 }
 variable "env_prefix" {
 

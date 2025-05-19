@@ -1,6 +1,6 @@
 
 env_prefix                             = "dev"
-vpc_name                               = "dev_env"
+vpc_name                               = "tien-dung-cluster-vpc"
 cidrvpc                                = "10.0.0.0/16"
 enable_nat_gateway                     = true
 single_nat_gateway                     = true
@@ -62,7 +62,7 @@ bastion_definition = {
 cluster_endpoint_public_access = true
 
 api_gateways = {
-  "rest_weather" = {
+  "bloop" = {
     aws_api_gateway_rest_api_name        = "blooperry-simple"
     aws_api_gateway_rest_api_description = "porpose for test the blooperry"
     api_gateway_protocol                 = "HTTP"
