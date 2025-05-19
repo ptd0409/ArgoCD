@@ -16,9 +16,9 @@ from helper.logger_config import logger
 #just for dev testing only
 SECRET_KEY = "fPQdwZzXkrD4AvFB68g4"
 
-cors = CORS(app, resources={r"*": {"origins": "https://weathear-api.quyennv.com, http://localhost:3000, localhost:3000"}},
+cors = CORS(app, resources={r"*": {"origins": "https://blooperry.com, http://localhost:3000, localhost:3000"}},
             supports_credentials=True, origins=[
-        "https://weathear-api.quyennv.com",
+        "https://blooperry.com",
         "localhost:3000",
         "http://localhost:3000"])
 
