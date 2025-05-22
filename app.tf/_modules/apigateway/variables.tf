@@ -30,3 +30,10 @@ variable "authorizers" {
 variable "routes" {
 
 }
+variable "access_log_settings" {
+  type = object({
+    destination_arn = string
+    format          = string
+  })
+  default = null
+}

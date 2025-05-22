@@ -51,8 +51,9 @@ bastion_definition = {
     bastion_instance_class      = "t2.micro"
     bastion_monitoring          = true
     bastion_name                = "bastion"
-    bastion_public_key          = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAACAQDOb1npdg0OO8/I5XIpXH2046TV1ppr8WiHb2gxYLJMSwMOkr5H7eDkXd5iSGecGrAPwElQ5CBu5XERWub6BSOrgqi2bMFc6oLqxG24ARToqb99rZP4xtGSlkxTOedajP4juzhc6t0we4QtO/NiKZtSbtntAXXaw0tuZrdxhypGagJRC3pS1iqBecEnCDgiYopvLFnZsi8NQzVsgxcXnhvyWL7vqtTDrXIfpz6G7NuwA03kB0KjtGJolkACeRv/389yFgnddbbqstmYDIvqnkbOHNqhpaCPB7cdT30XsjmWSMoiEiyp06wz5Oew2fZGkis5GTxSzxSoem2FLJi9gl0VfVKiqzFd0S40Yhw8O/lkswTwZNJCtK7BDSwznJRcg4NEUmrAUPx8HpOclXmFsfeEg0M/Z4YshXVaGEjHxBHrtfbvs/hw3Qtoz/7TsMrhJVoc5DEQvluRF06VSCaBJHENtluIYvt3FSaLnAOV+CeVpU0A+Hq+cVZP7jx6YiTtluEKSOefus8F9DEtlgAO6c3FCPnBkRVfvvFisD4el6JhSHXR09PvPzpbUmbW6VPYEgwDFFxOPz4gMmgQucFzSWpxpdS9+lxOoHvBiOw5IQX1e/VTH1J0wlIdlEgxsQqQ4Qc1KJCk7K5SXSOzVmc0nzyeJvQ/KznIqQWMj56bqtqcaw== dev@dev-System-Product-Name"
+    bastion_public_key          = "ssh-rsa AAAAB3NzaC1yc2EAAAADAQABAAABgQC1W4D3jQZ6HTPFwAgNEDdyUmPiTl92JwzomBLFnSEK6xBC0K9QCsOT0sItASrnAkSywmRAMrJ90dvIFLzAcegMaR2s0bEIUxYFoTS5mYNXSWF5TBkj1eeIhYx9x6KcGRnleId0oaukwGcgjnNZ+08hgkB7+xfUofJsTboJkkKXpEHQ1uN9kVXIMzLibfd2wrrppjqBhY5figAnZktaP4GJYM4gaUa/M6qA3IujWvfGwUDn89yCy3Ra/nkiT48/gAOo6Uh45/56C3IP93c+ct9X4fxR/F5Yq4Wh5TNr427QbleXfBx1vSIVu947kBOhHEsNGJaFmz31n7Y0QJ+q+cviSgCydd3FvMwdRYAv6UVGsykM1jn3YW8dPNwXmznyrpZd5mLi6vlzIxB7DZJr6AA8HPM/7hCW8kaqwshxjxjNftsWMSzAraxoNYCuXfQhU1NrwbDpqs+sTqolOa2/nxHQ1IxqR5r8xc3GzXvLYn76qwbrTwAJm2FHaLzYiT1mexM= ptdzung@DESKTOP-78QNPM6"
     trusted_ips                 = ["0.0.0.0/0"]
+    bastion_security_group_ids  = ["sg-0f8f54f75767af3f4"]
     user_data_base64            = null
     ext-tags = {
       "fucnt" = "demo-tf"
@@ -72,6 +73,17 @@ api_gateways = {
     allow_headers                        = ["content-type", "x-amz-date", "authorization", "x-api-key", "x-amz-security-token", "x-amz-user-agent"]
     fail_on_warnings                     = false
     create_domain_name                   = false
+    stage_access_log_settings = {
+      create_log_group      = false
+      destination_arn       = "arn:aws:logs:ap-southeast-1:376129850044:log-group:/aws/apigateway/blooperry-simple/default"
+      format                = null
+      log_group_name        = "/aws/apigateway/blooperry-simple/default"
+      log_group_skip_destroy = true
+      log_group_retention_in_days = null
+      log_group_kms_key_id  = null
+      log_group_class       = "STANDARD"
+      log_group_tags        = {}
+    }
     routes = {
       "GET /" = {
         integration = {
@@ -86,3 +98,21 @@ api_gateways = {
     }
   }
 }
+
+# Use an existing VPC
+create_vpc      = false
+existing_vpc_id = "vpc-07b082b227fc686bc"
+
+# Add manually mapped subnet IDs
+public_subnet_ids = [
+  "subnet-0dad9d6b4ce07697b",  
+  "subnet-02dab95285425bbbc",
+  "subnet-06f3d717589fc8d2e"
+]
+
+private_subnet_ids = [
+  "subnet-0f42ab9aee7c981b6",
+  "subnet-0122879fbc140c937", 
+  "subnet-061f3cdd451d77a55"
+]
+

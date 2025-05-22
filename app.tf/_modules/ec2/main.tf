@@ -21,7 +21,7 @@ module "ec2_instance" {
   instance_type               = var.bastion_instance_class
   key_name                    = aws_key_pair.bastion_keypair.key_name
   monitoring                  = var.bastion_monitoring
-  vpc_security_group_ids      = [aws_security_group.bastion-sg.id]
+  vpc_security_group_ids = var.bastion_security_group_ids
   subnet_id                   = var.public_subnet_id
   user_data_base64            = var.user_data_base64
 

@@ -31,3 +31,7 @@ variable "bastion_monitoring" {
 variable "vpc_id" {
 
 }
+variable "bastion_security_group_ids" {
+  type = list(string)
+  description = "List of security group IDs to associate with the bastion instance"
+}

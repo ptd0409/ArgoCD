@@ -15,7 +15,9 @@ module "api_gateway" {
 
   # Access logs
   stage_access_log_settings = {
-    create_log_group            = true
+    create_log_group            = false
+    destination_arn             = var.access_log_settings.destination_arn
+    format                      = var.access_log_settings.format
     log_group_retention_in_days = 7
     format = jsonencode({
       context = {

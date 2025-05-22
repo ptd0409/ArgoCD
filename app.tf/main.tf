@@ -4,29 +4,35 @@ locals {
   azs        = length(data.aws_availability_zones.available.names)
   account_id = data.aws_caller_identity.current.account_id
 }
-resource "random_integer" "this" {
-  min = 0
-  max = 2
-}
 
 module "vpc" {
-  source                                 = "./_modules/network"
-  vpc_cidr                               = var.cidrvpc
-  vpc_name                               = var.vpc_name
-  enable_nat_gateway                     = var.enable_nat_gateway
-  single_nat_gateway                     = var.single_nat_gateway
-  enable_dns_hostnames                   = var.enable_dns_hostnames
-  create_database_subnet_group           = var.create_database_subnet_group
-  create_database_subnet_route_table     = var.create_database_subnet_route_table
-  create_database_internet_gateway_route = var.create_database_internet_gateway_route
-  enable_flow_log                        = var.enable_flow_log
-  create_flow_log_cloudwatch_iam_role    = var.create_flow_log_cloudwatch_iam_role
-  create_flow_log_cloudwatch_log_group   = var.create_flow_log_cloudwatch_log_group
-  cluster_name                           = var.eks_config.cluster_name
-  default_tags = merge(
-    var.default_tags
-  )
+  source = "./_modules/network"
+
+  create_vpc      = false
+  existing_vpc_id = var.existing_vpc_id  
+  vpc_name        = "my-existing-vpc"        
+  vpc_cidr        = "10.0.0.0/16"            
+
+  azs             = ["ap-southeast-1a", "ap-southeast-1b", "ap-southeast-1c"]
+  private_subnets = ["10.0.101.0/24", "10.0.102.0/24", "10.0.103.0/24"]
+  public_subnets  = ["10.0.1.0/24", "10.0.2.0/24", "10.0.3.0/24"]
+  #intra_subnets   = ["10.0.4.0/24", "10.0.5.0/24", "10.0.6.0/24"]
+  public_subnet_ids  = var.public_subnet_ids
+  private_subnet_ids = var.private_subnet_ids
+  enable_nat_gateway                     = false
+  single_nat_gateway                     = false
+  enable_dns_hostnames                   = true
+  create_database_subnet_group           = false
+  create_database_subnet_route_table     = false
+  create_database_internet_gateway_route = false
+  enable_flow_log                        = false
+  create_flow_log_cloudwatch_iam_role    = false
+  create_flow_log_cloudwatch_log_group   = false
+
+  cluster_name = var.eks_config.cluster_name
+  default_tags = var.default_tags
 }
+
 
 #CREATE THE EKS CLUSTER
 module "eks" {
@@ -34,7 +40,8 @@ module "eks" {
     module.vpc
   ]
   source                                         = "./_modules/eks"
-  vpc_id                                         = module.vpc.vpc_id
+  existing_vpc_id                                = var.existing_vpc_id
+  vpc_id                                         = var.existing_vpc_id
   private_subnet_ids                             = module.vpc.vpc_private_subnet_ids
   intranet_subnet_ids                            = module.vpc.intra_subnet_ids
   env_prefix                                     = var.env_prefix
@@ -68,7 +75,8 @@ module "ec2" {
   user_data_base64            = each.value.user_data_base64
   bastion_ami                 = each.value.bastion_ami
   associate_public_ip_address = each.value.associate_public_ip_address
-  public_subnet_id            = module.vpc.vpc_public_subnet_ids[random_integer.this.result]
+  public_subnet_id = module.vpc.vpc_public_subnet_ids[0] # just hardcode index or map it
+  bastion_security_group_ids  = each.value.bastion_security_group_ids
   bastion_monitoring          = each.value.bastion_monitoring
   default_tags = merge(
     var.default_tags,
@@ -94,7 +102,10 @@ module "apigateway" {
   allow_headers                        = each.value.allow_headers
   allow_origins                        = each.value.allow_origins
   fail_on_warnings                     = each.value.fail_on_warnings
-
+  access_log_settings = {
+    destination_arn = each.value.stage_access_log_settings.destination_arn
+    format          = each.value.stage_access_log_settings.format
+  }
   tags = merge(
     var.default_tags,
     each.value.ext-tags,

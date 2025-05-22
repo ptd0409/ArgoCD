@@ -47,3 +47,7 @@ variable "endpoint_public_access" {
 variable "intranet_subnet_ids" {
 
 }
+variable "existing_vpc_id" {
+  description = "The ID of the existing VPC used by EKS"
+  type        = string
+}
